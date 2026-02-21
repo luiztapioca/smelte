@@ -1,27 +1,61 @@
 ---
 import "../styles/global.css";
+import { ModeWatcher } from "mode-watcher";
+import ThemeToggle from "$lib/components/theme-toggle.svelte";
+import Favicon from "/public/favicon.svg";
+import Svelte from "public/svelte-logo.svg";
+import { Github } from "@lucide/svelte";
+const { title } = Astro.props;
+
 ---
+<script is:inline>
+ const isBrowser = typeof localStorage !== 'undefined';
+ const getThemePreference = () => {
+  if (isBrowser && localStorage.getItem('theme')) {
+   return localStorage.getItem('theme');
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+   ? 'dark' : 'light';
+ };
+ const isDark = getThemePreference() === 'dark';
+ document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+ 
+ if (isBrowser) {
+  const observer = new MutationObserver(() => {
+   const isDark = document.documentElement.classList.contains('dark');
+   localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+  observer.observe(document.documentElement, {
+   attributes: true,
+   attributeFilter: ['class']
+  });
+ }
+</script>
 
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{ title }</title>
 	</head>
-	<body>
+	<body class="min-h-screen flex flex-col font-mono">
+		<header class="flex items-center justify-between p-4">
+			<a class="flex items-center gap-2" href="/">
+				<Favicon height={48} width={48} />
+				<p class="">Smelte</p>
+			</a>
+			<ThemeToggle client:load />
+		</header>
 		<slot />
+		<footer class="flex justify-center items-center gap-6">
+			<a class="hover:text-primary hover:animate-pulse transition-all" href="https://github.com/luiztapioca/smelte"><Github class="mx-auto my-4 select-none" height={24} width={24} /></a>
+			<a class="hover:text-primary hover:animate-pulse transition-all" href="https://svelte.dev"><Svelte class="mx-auto my-4 select-none" height={24} width={24} /></a>
+		</footer>
+		<ModeWatcher client:load />
 	</body>
-</html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+</html>

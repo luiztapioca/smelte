@@ -12,12 +12,16 @@
     "@astrojs/svelte": "^7.2.5",
     "@tailwindcss/vite": "^4.2.0",
     "astro": "^5.17.1",
+    "astro-expressive-code": "^0.41.6",
+    "mode-watcher": "0.5.1",
     "svelte": "^5.53.1",
     "tailwindcss": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@lucide/svelte": "^0.575.0",
+    "@internationalized/date": "^3.10.0",
+    "@lucide/svelte": "^0.561.0",
+    "bits-ui": "^2.14.4",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.4.0",
     "tailwind-variants": "^3.2.2",
